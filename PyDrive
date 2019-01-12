@@ -1,0 +1,33 @@
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import os
+
+g_login = GoogleAuth()
+g_login.LocalWebserverAuth() # will open browser window for authentication
+drive = GoogleDrive (g_login)
+# importing os and glob to find all pdfs inside subfolder
+import glob
+"""Update an existing file's metadata and content.
+
+  Args:
+    service: Drive API service instance.
+    file_id: ID of the file to update.
+    new_title: New title for the file.
+    new_description: New description for the file.
+    new_mime_type: New MIME type for the file.
+    new_filename: Filename of the new content to upload.
+    new_revision: Whether or not to create a new revision for this file.
+  Returns:
+    Updated file metadata if successful, None otherwise.
+  """
+os.chdir("C:\\Users\\im2ta\\OneDrive\\Documents\\NPBA PDFs")
+for file in glob.glob("pdf"):
+    print (file)
+    with open(file, "r") as f:
+        fn = os.path.basename(f.name)
+        file_drive = drive.CreateFile({'title': fn })
+    file_drive.SetContentString(f.read())
+    file_drive.Upload()
+    print ("The file: " + fn + " has been uploaded")
+
+print ("All files have been uploaded")
